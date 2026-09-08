@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Stock In</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+        }
+
+        .header {
+            background: #1f4e78;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #1f4e78;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .size-title {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #1f4e78;
+        }
+
+        .size-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .size-box {
+            background: #f4f6f8;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .size-box label {
+            text-align: center;
+            color: #1f4e78;
+        }
+
+        .total-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: #eaf2f8;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 7px;
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .update-btn {
+            background: #217346;
+        }
+
+        .update-btn:hover {
+            background: #185c37;
+        }
+
+        .back-btn {
+            background: #777;
+        }
+
+        .back-btn:hover {
+            background: #555;
+        }
+
+        @media (max-width: 700px) {
+
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .size-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .size-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+
+        function calculateTotal() {
+
+            let total = 0;
+
+            for (let size = 2; size <= 14; size++) {
+
+                let input = document.getElementById(
+                    "size_" + size
+                );
+
+                let value = parseInt(input.value) || 0;
+
+                if (value < 0) {
+                    value = 0;
+                    input.value = 0;
+                }
+
+                total += value;
+            }
+
+            document.getElementById(
+                "total_qty"
+            ).innerText = total;
+        }
+
+
+        function confirmUpdate() {
+
+            return confirm(
+                "Are you sure you want to update this Stock In record?"
+            );
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <h1>✏️ Edit Stock In</h1>
+
+    <p>
+        Update Stock In Date, Article & Size Wise Quantity
+    </p>
+
+</div>
+
+
+<div class="container">
+
+    <h2>Update Stock In Record</h2>
+
+    <form
+        method="POST"
+        action="/edit-stock-in/{{ stock[0] }}"
+        onsubmit="return confirmUpdate();"
+    >
+
+        <!-- DATE -->
+
+        <div class="form-group">
+
+            <label>
+                Stock In Date
+            </label>
+
+            <input
+                type="date"
+                name="stock_date"
+                value="{{ stock[1] }}"
+                required
+            >
+
+        </div>
+
+
+        <!-- ARTICLE -->
+
+        <div class="form-group">
+
+            <label>
+                Select Article
+            </label>
+
+            <select
+                name="article_code"
+                required
+            >
+
+                <option value="">
+                    -- Select Article --
+                </option>
+
+                {% for article in articles %}
+
+                    <option
+                        value="{{ article[0] }}"
+                        {% if stock[2] == article[0] %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ article[0] }} - {{ article[1] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- SIZES -->
+
+        <h3 class="size-title">
+            📦 Size Wise Stock In Quantity
+        </h3>
+
+
+        <div class="size-grid">
+
+            <div class="size-box">
+                <label>Size 2</label>
+                <input
+                    id="size_2"
+                    type="number"
+                    name="size_2"
+                    min="0"
+                    value="{{ stock[4] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 3</label>
+                <input
+                    id="size_3"
+                    type="number"
+                    name="size_3"
+                    min="0"
+                    value="{{ stock[5] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 4</label>
+                <input
+                    id="size_4"
+                    type="number"
+                    name="size_4"
+                    min="0"
+                    value="{{ stock[6] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 5</label>
+                <input
+                    id="size_5"
+                    type="number"
+                    name="size_5"
+                    min="0"
+                    value="{{ stock[7] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 6</label>
+                <input
+                    id="size_6"
+                    type="number"
+                    name="size_6"
+                    min="0"
+                    value="{{ stock[8] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 7</label>
+                <input
+                    id="size_7"
+                    type="number"
+                    name="size_7"
+                    min="0"
+                    value="{{ stock[9] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 8</label>
+                <input
+                    id="size_8"
+                    type="number"
+                    name="size_8"
+                    min="0"
+                    value="{{ stock[10] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 9</label>
+                <input
+                    id="size_9"
+                    type="number"
+                    name="size_9"
+                    min="0"
+                    value="{{ stock[11] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 10</label>
+                <input
+                    id="size_10"
+                    type="number"
+                    name="size_10"
+                    min="0"
+                    value="{{ stock[12] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 11</label>
+                <input
+                    id="size_11"
+                    type="number"
+                    name="size_11"
+                    min="0"
+                    value="{{ stock[13] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 12</label>
+                <input
+                    id="size_12"
+                    type="number"
+                    name="size_12"
+                    min="0"
+                    value="{{ stock[14] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 13</label>
+                <input
+                    id="size_13"
+                    type="number"
+                    name="size_13"
+                    min="0"
+                    value="{{ stock[15] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+            <div class="size-box">
+                <label>Size 14</label>
+                <input
+                    id="size_14"
+                    type="number"
+                    name="size_14"
+                    min="0"
+                    value="{{ stock[16] }}"
+                    oninput="calculateTotal()"
+                >
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="total-box">
+
+            Total Pairs:
+            <span id="total_qty">
+                {{ stock[17] }}
+            </span>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+            <button
+                type="submit"
+                class="btn update-btn"
+            >
+                💾 Update Stock In
+            </button>
+
+            <a
+                href="/stock-in-history"
+                class="btn back-btn"
+            >
+                ← Back to History
+            </a>
+
+            <a
+                href="/"
+                class="btn back-btn"
+            >
+                🏠 Dashboard
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<script>
+    calculateTotal();
+</script>
+
+</body>
+</html>

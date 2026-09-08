@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Party Report</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            color: #333;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #1f4e78, #2d6a9f);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            font-size: 17px;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            width: 95%;
+            max-width: 1600px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #1f4e78;
+        }
+
+        /* FILTER */
+
+        .filter-section {
+            background: #f1f4f7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .filter-section h3 {
+            margin-top: 0;
+            color: #1f4e78;
+            font-size: 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .filter-box {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .filter-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .filter-box input,
+        .filter-box select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn,
+        .clear-btn {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 7px;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .filter-btn {
+            background: #1f4e78;
+        }
+
+        .filter-btn:hover {
+            background: #163a5a;
+        }
+
+        .clear-btn {
+            background: #777;
+        }
+
+        .clear-btn:hover {
+            background: #555;
+        }
+
+        /* SUMMARY CARDS */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .summary-card {
+            background: #ffffff;
+            border-left: 5px solid #1f4e78;
+            padding: 18px;
+            border-radius: 9px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .summary-card h4 {
+            margin: 0;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .summary-card p {
+            margin: 8px 0 0;
+            color: #1f4e78;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* TABLE */
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1300px;
+        }
+
+        th {
+            background: #1f4e78;
+            color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+            white-space: nowrap;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tbody tr:hover {
+            background: #eef5fb;
+        }
+
+        .party-name {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .dispatch-count {
+            font-weight: bold;
+        }
+
+        .total {
+            font-weight: bold;
+            background: #eaf2f8;
+            color: #1f4e78;
+        }
+
+        .no-data {
+            padding: 20px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* BUTTONS */
+
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .excel {
+            background: #217346;
+        }
+
+        .excel:hover {
+            background: #185c37;
+        }
+
+        .back {
+            background: #777;
+        }
+
+        .back:hover {
+            background: #555;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-box {
+                width: 100%;
+            }
+
+            .filter-buttons {
+                width: 100%;
+            }
+
+            .filter-btn,
+            .clear-btn {
+                flex: 1;
+                text-align: center;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .container {
+                width: 94%;
+                padding: 18px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <h1>👥 Party Report</h1>
+
+    <p>
+        Party Wise Dispatch Summary
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <h2>📊 Party Wise Report</h2>
+
+
+    <!-- FILTER SECTION -->
+
+    <div class="filter-section">
+
+        <h3>🔎 Filter Party Report</h3>
+
+        <form method="GET" action="/party-report">
+
+            <div class="filters">
+
+
+                <!-- DATE -->
+
+                <div class="filter-box">
+
+                    <label>
+                        Dispatch Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="dispatch_date"
+                        value="{{ selected_date }}"
+                    >
+
+                </div>
+
+
+                <!-- PARTY -->
+
+                <div class="filter-box">
+
+                    <label>
+                        Select Party
+                    </label>
+
+                    <select name="party_name">
+
+                        <option value="">
+                            -- All Parties --
+                        </option>
+
+                        {% for party in parties %}
+
+                        <option
+                            value="{{ party }}"
+                            {% if selected_party == party %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ party }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- ARTICLE -->
+
+                <div class="filter-box">
+
+                    <label>
+                        Select Article
+                    </label>
+
+                    <select name="article_code">
+
+                        <option value="">
+                            -- All Articles --
+                        </option>
+
+                        {% for article in articles %}
+
+                        <option
+                            value="{{ article[0] }}"
+                            {% if selected_article == article[0] %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ article[0] }} - {{ article[1] }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="filter-buttons">
+
+                    <button
+                        type="submit"
+                        class="filter-btn"
+                    >
+                        🔍 Filter
+                    </button>
+
+                    <a
+                        href="/party-report"
+                        class="clear-btn"
+                    >
+                        🔄 Clear
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary">
+
+        <div class="summary-card">
+
+            <h4>👥 Total Parties</h4>
+
+            <p id="totalParties">
+                0
+            </p>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h4>🚚 Total Dispatches</h4>
+
+            <p id="totalDispatches">
+                0
+            </p>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <h4>📦 Total Pairs</h4>
+
+            <p id="totalPairs">
+                0
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- REPORT TABLE -->
+
+    <div class="table-container">
+
+        <table id="partyTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>Party Name</th>
+
+                    <th>Dispatch Count</th>
+
+                    <th>Size 2</th>
+                    <th>Size 3</th>
+                    <th>Size 4</th>
+                    <th>Size 5</th>
+                    <th>Size 6</th>
+                    <th>Size 7</th>
+                    <th>Size 8</th>
+                    <th>Size 9</th>
+                    <th>Size 10</th>
+                    <th>Size 11</th>
+                    <th>Size 12</th>
+                    <th>Size 13</th>
+                    <th>Size 14</th>
+
+                    <th>Total Pairs</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for report in party_reports %}
+
+                <tr class="report-row">
+
+                    <td class="party-name">
+                        {{ report[0] }}
+                    </td>
+
+                    <td class="dispatch-count">
+                        {{ report[1] }}
+                    </td>
+
+                    <td>{{ report[2] }}</td>
+                    <td>{{ report[3] }}</td>
+                    <td>{{ report[4] }}</td>
+                    <td>{{ report[5] }}</td>
+                    <td>{{ report[6] }}</td>
+                    <td>{{ report[7] }}</td>
+                    <td>{{ report[8] }}</td>
+                    <td>{{ report[9] }}</td>
+                    <td>{{ report[10] }}</td>
+                    <td>{{ report[11] }}</td>
+                    <td>{{ report[12] }}</td>
+                    <td>{{ report[13] }}</td>
+                    <td>{{ report[14] }}</td>
+
+                    <td class="total">
+                        {{ report[15] }}
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="16"
+                        class="no-data"
+                    >
+                        No Party Report Available
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+        <a
+            href="/export-party"
+            class="btn excel"
+        >
+            📊 Export to Excel
+        </a>
+
+        <a
+            href="/"
+            class="btn back"
+        >
+            🏠 Dashboard
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<!-- SUMMARY SCRIPT -->
+
+<script>
+
+    function calculateSummary() {
+
+        const rows =
+            document.querySelectorAll(".report-row");
+
+        let totalParties = 0;
+        let totalDispatches = 0;
+        let totalPairs = 0;
+
+
+        rows.forEach(function(row) {
+
+            totalParties++;
+
+            const dispatchCount =
+                parseInt(
+                    row.cells[1].innerText
+                ) || 0;
+
+            const total =
+                parseInt(
+                    row.cells[15].innerText
+                ) || 0;
+
+            totalDispatches += dispatchCount;
+
+            totalPairs += total;
+
+        });
+
+
+        document.getElementById("totalParties").innerText =
+            totalParties;
+
+        document.getElementById("totalDispatches").innerText =
+            totalDispatches;
+
+        document.getElementById("totalPairs").innerText =
+            totalPairs;
+
+    }
+
+
+    calculateSummary();
+
+</script>
+
+
+</body>
+
+</html>

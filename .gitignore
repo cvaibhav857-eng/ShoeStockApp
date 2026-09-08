@@ -1,0 +1,5 @@
+venv/
+stock.db
+stock_backup.db
+__pycache__/
+stock - backup.db

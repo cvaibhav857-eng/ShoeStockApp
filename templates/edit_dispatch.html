@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Edit Dispatch</title>
+
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+        }
+
+
+        .header {
+            background: #1f4e78;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+
+        h2 {
+            margin-top: 0;
+            color: #1f4e78;
+        }
+
+
+        .form-section {
+            background: #f4f6f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+
+        .form-section h3 {
+            margin-top: 0;
+            color: #1f4e78;
+        }
+
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+
+        .form-group input,
+        .form-group select {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+            background: white;
+        }
+
+
+        .size-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+
+        .size-box {
+            background: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+
+        .size-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+            text-align: center;
+            color: #1f4e78;
+        }
+
+
+        .size-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+
+        .total-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: #eaf2f8;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f4e78;
+        }
+
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+
+        .update-btn {
+            padding: 13px 25px;
+            background: #217346;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+        .update-btn:hover {
+            background: #185c37;
+        }
+
+
+        .cancel-btn {
+            display: inline-block;
+            padding: 13px 25px;
+            background: #777;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+
+        .cancel-btn:hover {
+            background: #555;
+        }
+
+
+        @media (max-width: 800px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .size-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .container {
+                width: 95%;
+                padding: 18px;
+            }
+
+            .size-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>✏️ Edit Dispatch</h1>
+
+    <p>
+        Update Dispatch Record
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <h2>
+        Edit Dispatch Entry
+    </h2>
+
+
+    <form
+        method="POST"
+        action="/edit-dispatch/{{ dispatch[0] }}"
+        onsubmit="return confirmUpdate();"
+    >
+
+
+        <!-- =================================================
+             BASIC INFORMATION
+             ================================================= -->
+
+        <div class="form-section">
+
+            <h3>
+                📋 Dispatch Details
+            </h3>
+
+
+            <div class="form-grid">
+
+
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Dispatch Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="dispatch_date"
+                        value="{{ dispatch[1] }}"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- PARTY -->
+
+                <div class="form-group">
+
+                    <label>
+                        Party Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="party_name"
+                        value="{{ dispatch[2] }}"
+                        placeholder="Enter Party Name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- ARTICLE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Article
+                    </label>
+
+                    <select
+                        name="article_code"
+                        required
+                    >
+
+                        {% for article in articles %}
+
+                            <option
+                                value="{{ article[0] }}"
+                                {% if dispatch[3] == article[0] %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ article[0] }} - {{ article[1] }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SIZE QUANTITIES
+             ================================================= -->
+
+        <div class="form-section">
+
+            <h3>
+                👟 Dispatch Quantity by Size
+            </h3>
+
+
+            <div class="size-grid">
+
+
+                <!-- SIZE 2 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 2
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_2"
+                        min="0"
+                        value="{{ dispatch[5] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 3 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 3
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_3"
+                        min="0"
+                        value="{{ dispatch[6] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 4 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 4
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_4"
+                        min="0"
+                        value="{{ dispatch[7] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 5 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 5
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_5"
+                        min="0"
+                        value="{{ dispatch[8] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 6 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 6
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_6"
+                        min="0"
+                        value="{{ dispatch[9] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 7 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 7
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_7"
+                        min="0"
+                        value="{{ dispatch[10] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 8 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 8
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_8"
+                        min="0"
+                        value="{{ dispatch[11] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 9 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 9
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_9"
+                        min="0"
+                        value="{{ dispatch[12] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 10 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 10
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_10"
+                        min="0"
+                        value="{{ dispatch[13] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 11 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 11
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_11"
+                        min="0"
+                        value="{{ dispatch[14] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 12 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 12
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_12"
+                        min="0"
+                        value="{{ dispatch[15] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 13 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 13
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_13"
+                        min="0"
+                        value="{{ dispatch[16] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+                <!-- SIZE 14 -->
+
+                <div class="size-box">
+
+                    <label>
+                        Size 14
+                    </label>
+
+                    <input
+                        type="number"
+                        name="size_14"
+                        min="0"
+                        value="{{ dispatch[17] }}"
+                        oninput="calculateTotal()"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div class="total-box">
+
+                Total Pairs:
+                <span id="totalQty">
+                    {{ dispatch[18] }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             BUTTONS
+             ================================================= -->
+
+        <div class="buttons">
+
+
+            <button
+                type="submit"
+                class="update-btn"
+            >
+                💾 Update Dispatch
+            </button>
+
+
+            <a
+                href="/dispatch-history"
+                class="cancel-btn"
+            >
+                ❌ Cancel
+            </a>
+
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+<script>
+
+
+function calculateTotal() {
+
+    let total = 0;
+
+
+    for (let size = 2; size <= 14; size++) {
+
+        let input = document.querySelector(
+            'input[name="size_' + size + '"]'
+        );
+
+
+        if (input) {
+
+            let value = parseInt(input.value) || 0;
+
+            if (value < 0) {
+                value = 0;
+            }
+
+            total += value;
+
+        }
+
+    }
+
+
+    document.getElementById("totalQty").innerText = total;
+
+}
+
+
+function confirmUpdate() {
+
+    return confirm(
+        "⚠️ Kya aap is dispatch ko update karna chahte hain?\n\n" +
+        "Purani quantity stock mein adjust hogi aur nayi quantity ke according stock update hoga."
+    );
+
+}
+
+
+calculateTotal();
+
+
+</script>
+
+
+</body>
+
+</html>

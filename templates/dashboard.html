@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shoe Stock Management</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+            color: #333;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #1f4e78, #2d6a9f);
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            font-size: 17px;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            width: 92%;
+            max-width: 1500px;
+            margin: 30px auto;
+        }
+
+        /* DASHBOARD CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+            border-left: 5px solid #1f4e78;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.14);
+        }
+
+        .card h3 {
+            margin: 0;
+            color: #555;
+            font-size: 18px;
+        }
+
+        .card p {
+            margin: 15px 0 0;
+            font-size: 34px;
+            font-weight: bold;
+            color: #1f4e78;
+        }
+
+        /* MAIN MENU */
+
+        .section-title {
+            margin-top: 35px;
+            margin-bottom: 15px;
+            color: #1f4e78;
+            font-size: 22px;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .menu a {
+            text-decoration: none;
+        }
+
+        .menu button {
+            width: 100%;
+            padding: 16px 12px;
+            border: none;
+            border-radius: 9px;
+            background: #1f4e78;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .menu button:hover {
+            background: #163a5a;
+            transform: translateY(-2px);
+        }
+
+        /* ARTICLE MANAGEMENT */
+
+        .article-management button {
+            background: #6f42c1;
+        }
+
+        .article-management button:hover {
+            background: #56329b;
+        }
+
+        /* EXCEL SECTION */
+
+        .export-section {
+            margin-top: 35px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.10);
+        }
+
+        .export-section h2 {
+            margin-top: 0;
+            color: #1f4e78;
+            font-size: 22px;
+        }
+
+        .export-section p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .export-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .export-buttons a {
+            text-decoration: none;
+        }
+
+        .export-buttons button {
+            width: 100%;
+            padding: 14px 10px;
+            border: none;
+            border-radius: 8px;
+            background: #217346;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .export-buttons button:hover {
+            background: #185c37;
+            transform: translateY(-2px);
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            color: #777;
+            margin: 35px 0 20px;
+            font-size: 14px;
+        }
+
+        /* TABLET */
+
+        @media (max-width: 1000px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .menu {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .export-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 94%;
+            }
+
+            .header {
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .menu {
+                grid-template-columns: 1fr;
+            }
+
+            .export-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>👟 Shoe Stock Management</h1>
+
+        <p>Warehouse Stock & Dispatch System</p>
+
+    </div>
+
+
+    <div class="container">
+
+        <!-- DASHBOARD CARDS -->
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>📦 Total Articles</h3>
+                <p>{{ total_articles }}</p>
+            </div>
+
+            <div class="card">
+                <h3>📊 Total Stock</h3>
+                <p>{{ total_stock }}</p>
+            </div>
+
+            <div class="card">
+                <h3>🚚 Total Dispatch</h3>
+                <p>{{ total_dispatch }}</p>
+            </div>
+
+            <div class="card">
+                <h3>📦 Remaining Stock</h3>
+                <p>{{ remaining_stock }}</p>
+            </div>
+
+        </div>
+
+
+        <!-- MAIN MENU -->
+
+        <h2 class="section-title">⚙️ Stock Management</h2>
+
+        <div class="menu">
+
+            <a href="/add-article">
+                <button>➕ Add Article</button>
+            </a>
+
+            <a href="/article-management" class="article-management">
+                <button>📋 Article Management</button>
+            </a>
+
+            <a href="/stock-in">
+                <button>📥 Stock In</button>
+            </a>
+
+            <a href="/stock-in-history">
+                <button>📜 Stock In History</button>
+            </a>
+
+            <a href="/dispatch">
+                <button>🚚 Dispatch</button>
+            </a>
+
+            <a href="/stock-report">
+                <button>📊 Stock Report</button>
+            </a>
+
+            <a href="/dispatch-history">
+                <button>📜 Dispatch History</button>
+            </a>
+
+            <a href="/party-report">
+                <button>👥 Party Report</button>
+            </a>
+
+        </div>
+
+
+        <!-- EXCEL EXPORT -->
+
+        <div class="export-section">
+
+            <h2>📊 Excel Export</h2>
+
+            <p>
+                Reports ko Excel file me download karein:
+            </p>
+
+            <div class="export-buttons">
+
+                <a href="/export-stock">
+                    <button>
+                        📦 Export Stock Report
+                    </button>
+                </a>
+
+                <a href="/export-dispatch">
+                    <button>
+                        🚚 Export Dispatch History
+                    </button>
+                </a>
+
+                <a href="/export-party">
+                    <button>
+                        👥 Export Party Report
+                    </button>
+                </a>
+
+                <a href="/export-stock-in">
+                    <button>
+                        📋 Export Stock In History
+                    </button>
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+            Shoe Stock Management System
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dispatch</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+        }
+
+        .header {
+            background: #1f4e78;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 7px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .sizes {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .size-box {
+            background: #f4f6f8;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .size-box b {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 13px 28px;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .dispatch-btn {
+            background: #1f4e78;
+        }
+
+        .back-btn {
+            background: #777;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 700px) {
+
+            .sizes {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h1>🚚 Dispatch</h1>
+
+        <p>Party Wise & Size Wise Dispatch</p>
+
+    </div>
+
+
+    <div class="container">
+
+        <form method="POST">
+
+
+            <label>Party Name</label>
+
+            <input
+                type="text"
+                name="party_name"
+                placeholder="Example: ABC Traders"
+                required
+            >
+
+
+            <label>Dispatch Date</label>
+
+            <input
+                type="date"
+                name="dispatch_date"
+                required
+            >
+
+
+            <label>Select Article</label>
+
+            <select name="article_code" required>
+
+                <option value="">
+                    -- Select Article --
+                </option>
+
+                {% for article in articles %}
+
+                    <option value="{{ article[0] }}">
+                        {{ article[0] }} - {{ article[1] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <label>
+                Enter Dispatch Quantity
+            </label>
+
+
+            <div class="sizes">
+
+
+                {% for size in range(2, 15) %}
+
+                <div class="size-box">
+
+                    <b>Size {{ size }}</b>
+
+                    <input
+                        type="number"
+                        name="size_{{ size }}"
+                        min="0"
+                        value="0"
+                    >
+
+                </div>
+
+                {% endfor %}
+
+
+            </div>
+
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="dispatch-btn"
+                >
+                    Dispatch
+                </button>
+
+
+                <button
+                    type="button"
+                    class="back-btn"
+                    onclick="window.location.href='/'"
+                >
+                    Back to Dashboard
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</body>
+</html>
