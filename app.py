@@ -2648,10 +2648,11 @@ def style_excel(sheet):
 # START APPLICATION
 # =========================================================
 
+# Initialize database when the app starts
+init_db()
+
+
 if __name__ == "__main__":
-
-    init_db()
-
     app.run(
         debug=False
     )
